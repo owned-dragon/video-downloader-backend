@@ -24,11 +24,29 @@ func main() {
 		os.Exit(1)
 	}
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	fileName := generateFileName()
+
+	videoPath := filepath.Join("downloads", fileName)
+
+	fmt.Printf("Running: %s %v\n", command_name, url)
+	cmdStr := fmt.Sprintf(`yt-dlp -f mp4 -o - "%s" | pv > "%s"`, url, fileName)
+	cmd := exec.Command("/bin/sh", "-c", cmdStr)
+
+	stderr, err := cmd.StderrPipe()
+=======
+>>>>>>> main
 	downloadsDir := "downloads"
 	if err := os.MkdirAll(downloadsDir, 0o755); err != nil {
 		fmt.Fprintf(os.Stderr, "error: creating downloads directory %q: %v\n", downloadsDir, err)
 		os.Exit(1)
 	}
+<<<<<<< HEAD
+=======
+>>>>>>> cb976f38bd965329706112b5d86fdff801f61a26
+>>>>>>> main
 
 	ytdlpPath, err := exec.LookPath("yt-dlp")
 	if err != nil {
@@ -138,6 +156,67 @@ func parsePercent(s string) float64 {
 	var p float64
 	fmt.Sscanf(s, "%f", &p)
 	return p
+<<<<<<< HEAD
+}
+
+func drawProgressBar(w io.Writer, percent float64) {
+	const width = 40
+	if percent < 0 {
+		percent = 0
+	}
+	if percent > 100 {
+		percent = 100
+	}
+	filled := int((percent / 100.0) * float64(width))
+	if filled < 0 {
+		filled = 0
+	}
+	if filled > width {
+		filled = width
+	}
+	bar := strings.Repeat("=", filled) + strings.Repeat(" ", width-filled)
+	fmt.Fprintf(w, "\r[%s] %6.2f%%", bar, percent)
+}
+
+func clearLine() string {
+	return "\x1b[2K"
+}
+
+func unwrapExitErr(err error) error {
+	var ee *exec.ExitError
+	if errors.As(err, &ee) {
+		return fmt.Errorf("%v", ee)
+	}
+	return err
+}
+
+func abs(f float64) float64 {
+	if f < 0 {
+		return -f
+	}
+	return f
+}
+
+func splitOnCRorLF(data []byte, atEOF bool) (advance int, token []byte, err error) {
+	for i, b := range data {
+		if b == '\n' || b == '\r' {
+			return i + 1, dropTrailingCRLF(data[:i]), nil
+		}
+	}
+	if atEOF && len(data) > 0 {
+		return len(data), dropTrailingCRLF(data), nil
+	}
+	return 0, nil, nil
+}
+
+func dropTrailingCRLF(b []byte) []byte {
+	n := len(b)
+	for n > 0 && (b[n-1] == '\n' || b[n-1] == '\r') {
+		n--
+	}
+	return b[:n]
+=======
+>>>>>>> main
 }
 
 func drawProgressBar(w io.Writer, percent float64) {

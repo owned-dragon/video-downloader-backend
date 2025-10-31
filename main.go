@@ -32,11 +32,8 @@ func runCommand(command_name string, url string) error {
 	videoPath := filepath.Join("downloads", fileName)
 
 	fmt.Printf("Running: %s %v\n", command_name, url)
-	cmd := exec.Command(command_name,
-		"-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4",
-		"-o", videoPath, url,
-		"--no-warnings", "--progress",
-	)
+	cmdStr := fmt.Sprintf(`yt-dlp -f mp4 -o - "%s" | pv > "%s"`, url, fileName)
+	cmd := exec.Command("/bin/sh", "-c", cmdStr)
 
 	stderr, err := cmd.StderrPipe()
 
